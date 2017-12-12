@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.portf.magnum.springbootws.domain.Categoria;
 import com.portf.magnum.springbootws.repository.CategoriaRepository;
+import com.portf.magnum.springbootws.service.exception.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -19,7 +20,11 @@ public class CategoriaService {
 	}
 	
 	public Categoria buscar(Integer id) {
-		return categoriaRepository.findOne(id);
+		Categoria categoria = categoriaRepository.findOne(id);
+		if(categoria == null) {
+			throw new ObjectNotFoundException("Objeto não encontrado! Id: " + id);
+		}
+		return categoria;
 	}
 	
 	public void salvar(Categoria categoria) {

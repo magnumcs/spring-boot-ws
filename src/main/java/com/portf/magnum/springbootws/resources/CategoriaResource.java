@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.portf.magnum.springbootws.domain.Categoria;
 import com.portf.magnum.springbootws.service.CategoriaService;
+import com.portf.magnum.springbootws.service.exception.ObjectNotFoundException;
 
 @RestController
 @RequestMapping(value="/categorias")
@@ -23,16 +24,14 @@ public class CategoriaResource {
 	public ResponseEntity<?> listar() {
 		
 		List<Categoria> categorias = categoriaService.listar();
-		
 		return ResponseEntity.ok().body(categorias);
 		
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> buscar(@PathVariable Integer id) {
+	public ResponseEntity<?> buscar(@PathVariable Integer id) throws ObjectNotFoundException {
 		Categoria categoria = categoriaService.buscar(id);
 		return ResponseEntity.ok().body(categoria);
-		
 	}
 
 }
