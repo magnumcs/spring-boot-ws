@@ -15,7 +15,7 @@ import com.portf.magnum.springbootws.service.exception.ObjectNotFoundException;
 
 @RestController
 @RequestMapping(value="/clientes")
-public class ClienteResources {
+public class ClienteResource {
 	
 	@Autowired
 	private ClienteService clienteService;
