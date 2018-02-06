@@ -83,7 +83,7 @@ public class SpringBootWsApplication implements CommandLineRunner {
 		Cliente cliente1 = new Cliente(null, "Harry Potter", "hpbruxo@gmail.com", "000.000.000-00", TipoClienteEnum.PESSOA_FISICA);
 		//cliente1.setTelefones(Stream.of("00000-0000", "11111-1111").collect(Collectors.toSet()));
 		
-		Endereco end1 = new Endereco(null, "Rua dos alfeneiros", "10", "Sem complemento", "Bairro Local", "000-000", cliente1, c3);
+		Endereco end1 = new Endereco(null, "Rua dos alfeneiros", "10", "Sem complemento", "Bairro Local", "00000-000", cliente1, c3);
 		cliente1.getEnderecos().addAll(Arrays.asList(end1));
 		cliente1.getTelefones().addAll(Arrays.asList("00000-0000", "11111-1111"));
 		
