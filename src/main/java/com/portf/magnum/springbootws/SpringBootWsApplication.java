@@ -1,5 +1,6 @@
 package com.portf.magnum.springbootws;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,11 @@ import com.portf.magnum.springbootws.domain.Cidade;
 import com.portf.magnum.springbootws.domain.Cliente;
 import com.portf.magnum.springbootws.domain.Endereco;
 import com.portf.magnum.springbootws.domain.Estado;
+import com.portf.magnum.springbootws.domain.Pagamento;
+import com.portf.magnum.springbootws.domain.PagamentoComCartao;
+import com.portf.magnum.springbootws.domain.Pedido;
 import com.portf.magnum.springbootws.domain.Produto;
+import com.portf.magnum.springbootws.enums.EstadoPagamentoEnum;
 import com.portf.magnum.springbootws.enums.TipoClienteEnum;
 import com.portf.magnum.springbootws.repository.CategoriaRepository;
 import com.portf.magnum.springbootws.repository.CidadeRepository;
@@ -20,6 +25,7 @@ import com.portf.magnum.springbootws.repository.ClienteRepository;
 import com.portf.magnum.springbootws.repository.EnderecoRepository;
 import com.portf.magnum.springbootws.repository.EstadoRepository;
 import com.portf.magnum.springbootws.repository.ProdutoRepository;
+import com.portf.magnum.springbootws.service.PedidoService;
 
 @SpringBootApplication
 public class SpringBootWsApplication implements CommandLineRunner {
@@ -41,6 +47,9 @@ public class SpringBootWsApplication implements CommandLineRunner {
 	
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private PedidoService pedidoService;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootWsApplication.class, args);
@@ -76,7 +85,7 @@ public class SpringBootWsApplication implements CommandLineRunner {
 		
 		est1.getCidades().addAll(Arrays.asList(c1));
 		est2.getCidades().addAll(Arrays.asList(c2));
-		
+		 
 		estadoRepository.save(Arrays.asList(est1, est2, est3));
 		cidadeRepository.save(Arrays.asList(c1, c2,c3));
 		
@@ -89,6 +98,21 @@ public class SpringBootWsApplication implements CommandLineRunner {
 		
 		clienteRepository.save(cliente1);
 		enderecoRepository.save(Arrays.asList(end1));
+		
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		
+		Pedido pedido = new Pedido(null, format.parse("06/03/2018 22:14"), cliente1, end1);
+		
+		Pagamento pagamento = new PagamentoComCartao(null,EstadoPagamentoEnum.QUITADO, pedido, 2);
+		pedido.setPagamento(pagamento);
+		
+		p1.getPedidos().addAll(Arrays.asList(pedido));
+		p2.getPedidos().addAll(Arrays.asList(pedido));
+		p3.getPedidos().addAll(Arrays.asList(pedido));
+		
+		pedidoService.adicionar(pedido);
+		produtoRepository.save(Arrays.asList(p1,p2,p3));
+		
 	}
 	
 }
