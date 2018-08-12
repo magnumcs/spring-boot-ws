@@ -12,8 +12,8 @@ public class PedidoService {
 	@Autowired
 	private PedidoRepository pedidoRepository;
 	
-	public void adicionar(Pedido pedido) {
-		pedidoRepository.save(pedido);
+	public void adicionar(Iterable<Pedido> pedidos) {
+		pedidoRepository.save(pedidos);
 	}
 
 }

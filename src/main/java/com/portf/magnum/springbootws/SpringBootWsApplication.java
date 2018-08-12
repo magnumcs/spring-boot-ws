@@ -3,28 +3,16 @@ package com.portf.magnum.springbootws;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
+import com.portf.magnum.springbootws.domain.*;
+import com.portf.magnum.springbootws.repository.*;
+import com.portf.magnum.springbootws.service.exception.PagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.portf.magnum.springbootws.domain.Categoria;
-import com.portf.magnum.springbootws.domain.Cidade;
-import com.portf.magnum.springbootws.domain.Cliente;
-import com.portf.magnum.springbootws.domain.Endereco;
-import com.portf.magnum.springbootws.domain.Estado;
-import com.portf.magnum.springbootws.domain.Pagamento;
-import com.portf.magnum.springbootws.domain.PagamentoComCartao;
-import com.portf.magnum.springbootws.domain.Pedido;
-import com.portf.magnum.springbootws.domain.Produto;
 import com.portf.magnum.springbootws.enums.EstadoPagamentoEnum;
 import com.portf.magnum.springbootws.enums.TipoClienteEnum;
-import com.portf.magnum.springbootws.repository.CategoriaRepository;
-import com.portf.magnum.springbootws.repository.CidadeRepository;
-import com.portf.magnum.springbootws.repository.ClienteRepository;
-import com.portf.magnum.springbootws.repository.EnderecoRepository;
-import com.portf.magnum.springbootws.repository.EstadoRepository;
-import com.portf.magnum.springbootws.repository.ProdutoRepository;
 import com.portf.magnum.springbootws.service.PedidoService;
 
 @SpringBootApplication
@@ -50,6 +38,12 @@ public class SpringBootWsApplication implements CommandLineRunner {
 	
 	@Autowired
 	private PedidoService pedidoService;
+
+	@Autowired
+	private PagamentoService pagamentoService;
+
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootWsApplication.class, args);
@@ -100,19 +94,34 @@ public class SpringBootWsApplication implements CommandLineRunner {
 		enderecoRepository.save(Arrays.asList(end1));
 		
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-		
-		Pedido pedido = new Pedido(null, format.parse("06/03/2018 22:14"), cliente1, end1);
-		
-		Pagamento pagamento = new PagamentoComCartao(null,EstadoPagamentoEnum.QUITADO, pedido, 2);
-		pedido.setPagamento(pagamento);
-		
-		p1.getPedidos().addAll(Arrays.asList(pedido));
-		p2.getPedidos().addAll(Arrays.asList(pedido));
-		p3.getPedidos().addAll(Arrays.asList(pedido));
-		
-		pedidoService.adicionar(pedido);
-		produtoRepository.save(Arrays.asList(p1,p2,p3));
-		
+
+		Pedido ped1 = new Pedido(null, format.parse("30/09/2017 10:32"), cliente1, end1);
+		Pedido ped2 = new Pedido(null, format.parse("10/10/2017 19:35"), cliente1, end1);
+
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamentoEnum.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamentoEnum.PENDENTE, ped2, format.parse("20/10/2017 00:00"), null);
+		ped2.setPagamento(pagto2);
+
+		cliente1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+
+		pedidoService.adicionar(Arrays.asList(ped1, ped2));
+		pagamentoService.adicionar(Arrays.asList(pagto1, pagto2));
+
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+
+		itemPedidoRepository.save(Arrays.asList(ip1, ip2, ip3));
+
 	}
 	
 }
