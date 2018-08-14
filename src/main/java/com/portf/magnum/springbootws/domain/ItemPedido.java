@@ -3,7 +3,9 @@ package com.portf.magnum.springbootws.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
 
+@Entity
 public class ItemPedido {
 
 	@JsonIgnore
