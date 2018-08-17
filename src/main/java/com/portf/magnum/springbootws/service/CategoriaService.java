@@ -19,7 +19,7 @@ public class CategoriaService {
 		return categoriaRepository.findAll();
 	}
 	
-	public Categoria buscar(Integer id) {
+	public Categoria find(Integer id) {
 		Categoria categoria = categoriaRepository.findOne(id);
 		if(categoria == null) {
 			throw new ObjectNotFoundException("Objeto não encontrado! Id: " + id);
@@ -32,4 +32,8 @@ public class CategoriaService {
 		return categoriaRepository.save(categoria);
 	}
 
+	public Categoria update(Categoria categoria) {
+		find(categoria.getId());
+		return categoriaRepository.save(categoria);
+	}
 }

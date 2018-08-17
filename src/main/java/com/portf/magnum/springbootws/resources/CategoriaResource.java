@@ -29,13 +29,23 @@ public class CategoriaResource {
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<?> buscar(@PathVariable Integer id) throws ObjectNotFoundException {
-		Categoria categoria = categoriaService.buscar(id);
+		Categoria categoria = categoriaService.find(id);
 		return ResponseEntity.ok().body(categoria);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody Categoria categoria) {
 		categoria = categoriaService.insert(categoria);
+		URI uri = ServletUriComponentsBuilder.
+				fromCurrentRequest().path("/{id}").
+				buildAndExpand(categoria.getId()).toUri();
+		return ResponseEntity.created(uri).build();
+	}
+
+	@RequestMapping(method = RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody Categoria categoria, @PathVariable Integer id) {
+		categoria.setId(id);
+		categoria = categoriaService.update(categoria);
 		URI uri = ServletUriComponentsBuilder.
 				fromCurrentRequest().path("/{id}").
 				buildAndExpand(categoria.getId()).toUri();

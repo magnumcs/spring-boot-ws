@@ -19,7 +19,7 @@ public class ClienteService {
 		return clienteRepository.findAll();
 	}
 	
-	public Cliente buscar(Integer id) {
+	public Cliente find(Integer id) {
 		Cliente cliente = clienteRepository.findOne(id);
 		if(cliente == null) {
 			throw new ObjectNotFoundException("Objeto não encontrado! Id: " + id);
