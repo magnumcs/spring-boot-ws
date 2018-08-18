@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ public class CategoriaResource {
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> buscar(@PathVariable Integer id) throws ObjectNotFoundException {
+	public ResponseEntity<?> find(@PathVariable Integer id) throws ObjectNotFoundException {
 		Categoria categoria = categoriaService.find(id);
 		return ResponseEntity.ok().body(categoria);
 	}
@@ -42,7 +43,7 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@RequestMapping(method = RequestMethod.PUT)
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
 	public ResponseEntity<Void> update(@RequestBody Categoria categoria, @PathVariable Integer id) {
 		categoria.setId(id);
 		categoria = categoriaService.update(categoria);
@@ -50,6 +51,12 @@ public class CategoriaResource {
 				fromCurrentRequest().path("/{id}").
 				buildAndExpand(categoria.getId()).toUri();
 		return ResponseEntity.created(uri).build();
+	}
+
+	@RequestMapping(value ="/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		categoriaService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }

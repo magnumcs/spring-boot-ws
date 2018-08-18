@@ -1,4 +1,4 @@
-package com.portf.magnum.springbootws.service.exception;
+package com.portf.magnum.springbootws.service;
 
 import com.portf.magnum.springbootws.domain.Pagamento;
 import com.portf.magnum.springbootws.repository.PagamentoRepository;

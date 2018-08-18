@@ -3,6 +3,7 @@ package com.portf.magnum.springbootws.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.portf.magnum.springbootws.domain.Categoria;
@@ -35,5 +36,13 @@ public class CategoriaService {
 	public Categoria update(Categoria categoria) {
 		find(categoria.getId());
 		return categoriaRepository.save(categoria);
+	}
+
+	public void delete(Integer id) {
+		try {
+			categoriaRepository.delete(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityViolationException("Não é possível excluir uma categoria que possui produto.");
+		}
 	}
 }

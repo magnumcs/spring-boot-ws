@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import com.portf.magnum.springbootws.domain.*;
 import com.portf.magnum.springbootws.repository.*;
-import com.portf.magnum.springbootws.service.exception.PagamentoService;
+import com.portf.magnum.springbootws.service.PagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
