@@ -2,7 +2,9 @@ package com.portf.magnum.springbootws.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.portf.magnum.springbootws.dto.CategoriaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,6 @@ public class CategoriaResource {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<?> listar() {
-		
 		List<Categoria> categorias = categoriaService.listar();
 		return ResponseEntity.ok().body(categorias);
 		
@@ -57,6 +58,13 @@ public class CategoriaResource {
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		categoriaService.delete(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> findAll() {
+		List<Categoria> categorias = categoriaService.findAll();
+		List<CategoriaDTO> categoriasDTO = categorias.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(categoriasDTO);
 	}
 
 }
