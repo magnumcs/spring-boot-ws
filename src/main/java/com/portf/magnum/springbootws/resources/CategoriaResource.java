@@ -15,19 +15,14 @@ import com.portf.magnum.springbootws.service.CategoriaService;
 import com.portf.magnum.springbootws.service.exception.ObjectNotFoundException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(value="/categorias")
 public class CategoriaResource {
 	
 	@Autowired
 	private CategoriaService categoriaService;
-	
-//	@RequestMapping(method = RequestMethod.GET)
-//	public ResponseEntity<?> listar() {
-//		List<Categoria> categorias = categoriaService.listar();
-//		return ResponseEntity.ok().body(categorias);
-//
-//	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) throws ObjectNotFoundException {
@@ -36,7 +31,8 @@ public class CategoriaResource {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Categoria categoria) {
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO categoriaDTO) {
+		Categoria categoria = categoriaService.fromDTO(categoriaDTO);
 		categoria = categoriaService.insert(categoria);
 		URI uri = ServletUriComponentsBuilder.
 				fromCurrentRequest().path("/{id}").
@@ -45,7 +41,8 @@ public class CategoriaResource {
 	}
 
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<Void> update(@RequestBody Categoria categoria, @PathVariable Integer id) {
+	public ResponseEntity<Void> update(@RequestBody CategoriaDTO categoriaDTO, @PathVariable Integer id) {
+		Categoria categoria = categoriaService.fromDTO(categoriaDTO);
 		categoria.setId(id);
 		categoria = categoriaService.update(categoria);
 		URI uri = ServletUriComponentsBuilder.
