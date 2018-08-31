@@ -2,7 +2,9 @@ package com.portf.magnum.springbootws.service;
 
 import java.util.List;
 
+import com.portf.magnum.springbootws.domain.Cliente;
 import com.portf.magnum.springbootws.dto.CategoriaDTO;
+import com.portf.magnum.springbootws.dto.ClienteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -38,7 +40,8 @@ public class CategoriaService {
 	}
 
 	public Categoria update(Categoria categoria) {
-		find(categoria.getId());
+		Categoria newCategoria = find(categoria.getId());
+		updateCategoria(newCategoria, categoria);
 		return categoriaRepository.save(categoria);
 	}
 
@@ -62,4 +65,9 @@ public class CategoriaService {
 	public Categoria fromDTO(CategoriaDTO categoriaDTO) {
 		return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
 	}
+
+	public void updateCategoria(Categoria newCategoria, Categoria categoria) {
+		categoria.setNome(newCategoria.getNome());
+	}
+
 }
